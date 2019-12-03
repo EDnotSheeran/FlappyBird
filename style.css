@@ -1,0 +1,237 @@
+/* @EDnotSheeran FlappyFrango Stylesheet */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: monospace;
+    font-size: 12px;
+    color: #fff;
+}
+/* corpo do jogo */
+#flappyfrango {
+    position: relative;
+    max-width: 767px;
+    height: 100%;
+    min-height: 525px;
+}
+/* tela do jogo */
+#tela {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+/* AREAS DO JOGO */
+
+/* plano de fundo */
+#fundo {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80%;
+    background-image: url(sprites/background-day.png);
+    background-repeat: repeat-x;
+    background-position: 0px 100%;
+    background-color: #4ec0ca;
+    animation: animFundo 7 s linear infinite;
+}
+/* area de voo */
+#limite-voo {
+    position: absolute;
+    bottom: 0;
+    height: 420px;
+    width: 100%;
+}
+
+/* area dos blocos de blocos */
+#parede {
+    position: absolute;
+    top: -16px;
+    height: 16px;
+    width: 100%;
+    background-color: red;
+}
+/* rodape */
+#rodape {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    background-image: url(sprites/base.png);
+    background-repeat: repeat-x;
+    background-position: 0 0;
+    background-color: #ded895;
+    animation: animRodape 2s linear infinite;
+}
+/* pontuacao */
+#pontuacao {
+    position: absolute;
+    top: 20px;
+    left: 150px;
+    z-index: 100;
+}
+#pontuacao img{
+    display: inline-block;
+    padding: 1px;
+}
+/* tela inicial */
+#tela-inicial {
+    position: absolute;
+    opacity: 0;
+    top: 75px;
+    left: 65px;
+    width: 184px;
+    height: 267px;
+    background-image: url(sprites/message.png);
+    background-repeat: no-repeat;
+}
+/* placar */
+#placar {
+    position: absolute;
+    display: none;
+    opacity: 0;
+    top: 62px;
+    left: 43px;
+    width: 236px;
+    height: 280px;
+    /* background-image: url(sprites/message.png); */
+    background-repeat: no-repeat;
+    z-index: 1000;
+
+    background-color: red;
+}
+/* medalha */
+#medalha {
+    position: absolute;
+    opacity: 0;
+    top: 114px;
+    left: 32px;
+    width: 44px;
+    height: 44px;
+    
+    background-color: red;
+}
+/* pontuacao */
+#pontuacao {
+    position: absolute;
+    opacity: 0;
+    top: 105px;
+    left: 107px;
+    width: 104px;
+    height: 14px;
+    text-align: right;
+}
+#pontuacao img {
+    padding-left: 2px;
+}
+/* melhor pontuacao */
+#melhor-pontuacao {
+    position: absolute;
+    top: 147px;
+    left: 107px;
+    width: 104px;
+    height: 14px;
+    text-align: right;
+}
+#melhor-pontuacao img {
+    padding-left: 2px;
+}
+/* play/replay */
+#play {
+    position: absolute;
+    opacity: 0;
+    top: 205px;
+    left: 65px;
+    width: 70px;
+    height: 115px;
+    cursor: pointer;
+}
+/* boudingbox (estudar criacao de jogos) */
+.contorno {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 1px solid red;
+}
+/* configuracao inicial do player */
+#frango {
+    left: 60px;
+    top: 200px;
+}
+/* o frango */
+.frango{
+    position: absolute;
+    width: 34px;
+    height: 24px;
+    background-image: url(sprites/yellowbird-downflap.png);
+    animation: animFrango 300ms steps(4) infinite;
+}
+/* configuracao da posicao e ani    macao do cano */
+.canos{
+    position: absolute;
+    left: -100px;
+    width: 52px;
+    height: 100%;
+    z-index: 10;
+    animation: animCano 755ms steps(4) infinite;
+}
+/* configuracao cano de baixo e do topo */
+.cano_topo {
+    position: absolute;
+    top: 0;
+    width: 52px;
+    background-image: url(sprites/pipe-green.png);
+    background-repeat: repeat-y;
+    background-position: center;
+}
+.cano_topo::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 52px;
+    height: 26px;
+}
+/* cano debaixo */
+.cano_debaixo {
+    position: absolute;
+    bottom: 0;
+    width: 52px;
+    background-image: url(sprites/pipe-green.png);
+    background-repeat: repeat-y;
+    background-position: center;
+}
+.cano_debaixo::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 26px;
+}
+/* ----------------------- animacoes --------------------------- */
+/* FUNDO */
+@keyframes animFundo{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -288px 0px;}
+}
+/* RODAPE */
+@keyframes animRodape{
+    0%{background-position: 0px 0px;}
+    100%{background-position: -336px 0px;}
+}
+/* CANOS */
+@keyframes animCanos{
+    0%{left: 900px;}
+    100%{left: -100px;}
+}
+/* FRANGO */
+@keyframes animFrango{
+    0%{background-image: url(sprites/yellowbird-downflap.png);}
+    50%{background-image: url(sprites/yellowbird-midflap.png)}
+    100%{background-image: url(sprites/yellowbird-upflap.png)}
+}

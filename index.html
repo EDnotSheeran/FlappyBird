@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FlappyFrango</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="flappyfrango"><!-- Config da pagina html -->
+        <section id="tela"><!-- Config da area do jogo -->
+            <section id="fundo" class="animado"><!-- Plano de fundo do jogo -->
+                <section id="limite-voo"><!-- Limite da area do jogador -->
+                    <div id="parede" class="animado"></div><!-- Parede do jogo -->
+                    <div id="frango" class="frango"></div><!-- Jogador -->
+                    <div id="main-score" ></div><!-- Escore da maior pontuacao -->
+                    <div id="tela-inicial"></div><!-- Tela inicial -->
+                    <div id="placar"><!-- Plcar do jogo -->
+                        <div id="medalha"></div><!-- medalha de classificacao -->
+                        <div id="pontuacao"></div><!-- pontuacao obtida -->
+                        <div id="maior-pontuacao"></div><!-- recorde -->
+                        <div id="play"><img src="sprites/play.png" height="70" width="150" alt="replay"></div><!-- botao de play/replay -->
+                    </div>     
+                    <!-- canos  -->
+                </section>
+            </section>
+        </section>
+        <section id="rodape" class="animado"></section>
+    </main>
+<script src="jquery.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
