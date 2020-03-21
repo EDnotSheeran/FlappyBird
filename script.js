@@ -101,7 +101,7 @@ function jogar(){
     // comecar os loops do jogo - aumentar tempo e intervalo
     var upauVaiComer = 1000.0 / 60.0;// 60fps
     loopJogoloop = setInterval(loopJogo, upauVaiComer);
-    loopCanoloop = setInterval(lopCano,1400);
+    loopCanoloop = setInterval(loopCano,1400);
     // acao de pulo para comecar o jogo
     pulaFrango();
 }
@@ -111,7 +111,7 @@ function atualizaFrango(frango){
     // aplicando a rotacao no CSS (x,y)
     $(frango).css({rotate: rotacao, top: posicao});
 }
-function jogoLoop(){
+function loopJogo(){
     var frango = $("#frango");
     // upar a posicao e velocidade do pranfo
     velocidade += gravidade;
@@ -119,17 +119,17 @@ function jogoLoop(){
     // aplicar novos valores do frango
     atualizaFrango(frango);
     // cria o contorno para o player
-    var box = document.getElementById("player").getBoundingClientRect();
+    var box = document.getElementById("frango").getBoundingClientRect();
     var origLargura = 34.0;
     var origAltura = 24.0;
-    var boxLargura = origLargura - (Math.sin(Math.abs(rotation)/90*8))
+    var boxLargura = origLargura - (Math.sin(Math.abs(rotacao)/90*8))
     var boxAltura = (origAltura + box.height)/2;
     var boxLeft = ((box.width - boxLargura)/2) + box.left;
     var boxTop = ((box.height - boxAltura)/2) + box.top;
     var boxRight = boxLeft + boxLargura;
     var boxBottom = boxTop + boxAltura;
     // se acertar o rodape, o frango morre
-    if(box.bottom >=$("#rodape".offset().top)){
+    if(box.bottom >=$("#rodape").offset().top){
         mataFrango();
         return;
     } 
@@ -167,12 +167,146 @@ function jogoLoop(){
         maisUmPonto();
     }
 }
+
+$(document).keydown(function(e){
 // permitindo pulos pela barra de espaco
     // usando a barra de espaco
-    if(e.keyCode== 32){
+    if(e.keyCode == 32){
         if(pontuacao == estado.TelaRecorde){
             $("#play").click();
         }else{
             screenClick();
         }
     }
+})
+//usar o mouse ou o teclado para comecar
+if('ontouchstart' in window)
+    $(document).on('touchstart', screenClick);
+else
+    $(document).on('mousedown', screenClick);
+
+function screenClick(){
+    if(estadoAtual== estado.TelaJogo)
+    {
+        pulaFrango();
+    }else if(estadoAtual == estado.TelaInicial){
+        jogar()
+    }
+}
+
+//funcao para passar o pulo e o som
+function pulaFrango(){
+    velocidade = pulo;
+    
+}
+function setPontuacao(erase){
+    var elemscore = $('#main-score')
+    elemscore.empty()
+
+    if(erase)
+        return
+    var digits = pontuacao.toString().split('')
+
+    for(var i = 0; i<digits.length;i++){
+        elemscore.append(`<img src='sprites/${digits[i]}.png`)
+    }
+
+}
+//pontuacao obtida
+function setPontuacaoObtida(){
+    var elemscore = $('#pontuacao')
+    elemscore.empty()
+
+    var digits = pontuacao.toString().split('')
+
+    for(var i = 0; i<digits.length;i++){
+        elemscore.append(`<img src='sprites/${digits[i]}.png`)
+    }
+
+}
+// set maior pontuacao
+function setMelhorPontuacao(){
+    var elemscore = $('#maior-pontuacao')
+    elemscore.empty()
+
+    var digits = pontuacao.toString().split('')
+
+    for(var i = 0; i<digits.length;i++){
+        elemscore.append(`<img src='sprites/${digits[i]}.png`)
+    }
+
+}
+
+function mataFrango(){
+    //pausando animacoes
+    $('.animado').css('animation-play-state', 'paused')
+    $('.animado').css('-webkit-animation-play-state', 'paused')
+
+    //dropar o passainho do  footer
+    var playerbottom = $('#frango').position().top + $('#frango').width()
+    var floor = $('#limite-voo').height()
+    var movey = Math.max(0, floor - playerbottom);
+    $('#frango').transition({y: movey+'px',rotate:90},1000, 'easeInOutCubic') 
+    
+    estadoAtual = estado.TelaRecorde
+
+    //destroi todos os games loops
+    clearInterval(loopJogoloop)
+    clearInterval(loopCanoloop)
+    loopJogoloop = null
+    loopCanoloop = null
+
+    mostraPontuacao()
+}
+//mostra tela pontuacao
+function mostraPontuacao(){
+    $('#placar').css('display','block')
+    setPontuacao(true)
+
+    if(pontuacao > melhorPontuacao)
+        //salva o score
+        melhorPontuacao = pontuacao
+        setCookie('melhor-pontuacao',melhorPontuacao,999)
+
+    //muda o quadro de score
+    setPontuacaoObtida();
+    setMelhorPontuacao();
+
+    $('#placar').css({y:'40px', opacity: 0})
+    $('#play').css({y:'40px', opacity: 0})
+    $('#placar').transition({y:'40px', opacity: 0},600,'ease',()=>{
+        // quando a animacao terminar
+        $('#play').transition({y:'0px', opacity:1},600,'ease')
+    })
+    //deixa o botao de replay com clique
+    replayClicavel = true
+
+}
+$('#replay').click(()=>{
+    if(!replayClicavel)
+        return
+    else
+        replayClicavel = false
+    
+    $('#placar').transition({y:'-40px', opacity: 0},600,'ease',()=>{
+        $('#placar').css('display', 'none')
+        mostraTelaInicial()
+    })
+}) 
+function maisUmPonto(){
+    pontuacao +=1
+    setMelhorPontuacao()
+}
+function atualizaCanos(){
+    $('.cano').filter(()=>{
+        return $(this).position().left <= -100
+    }).remove()
+    //add novo cano
+    var padding = 80
+    var constraint = 420 - canoAltura - (padding*2)
+    var topheight = Math.floor((Math.random()*constraint)+padding)
+    var bootomheight = (420 - pipeheight)-topheight
+    var newpipe = $('<div class="cano animated"><div class"cano_topo" style="height:'+topheight+'px;"></div><div class="cano_debaixo" style="height:'+bootomheight+'px"></div></div>')
+    $('#limite-voo').append(newpipe)
+    canos.push(newpipe)
+}
